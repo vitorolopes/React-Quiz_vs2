@@ -12,7 +12,9 @@ export const StateContextProvider = ( {children} ) => {
     const [quiz, setQuiz] = useState({amount: 5, category: "sports", difficulty: "easy"});
     const [questions, setQuestions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [showQandA, setShowQandA] = useState(false)
+    const [showQandA, setShowQandA] = useState(false);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [showModal, setShowModal] = useState(false)
 
     const handleChange = (e) => { 
         const name = e.target.name;
@@ -20,7 +22,6 @@ export const StateContextProvider = ( {children} ) => {
         setQuiz({...quiz, [name]: value})
     }
   
-
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log("Oiii");
@@ -34,15 +35,28 @@ export const StateContextProvider = ( {children} ) => {
     const fetchQuestions = async (amount, difficulty, categoryCode) => { 
         setIsLoading(true)
         try {
-            const res =  await axios.get(`${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}`)
+            const res =  await axios.get(`${baseUrl}amount=${amount}&category=${categoryCode}&difficulty=${difficulty}&type=multiple`)
             console.log(res.data.results);
             setQuestions(res.data.results)
         } catch (error) {
             console.log(error)
         }
-        setIsLoading(false)
         setShowQandA(true)
-     }
+        setIsLoading(false)
+    }
+
+    const nextQuestion = () => {
+        setQuestionIndex(questionIndex + 1)
+        if(questionIndex === questions.length - 1) {
+            setShowModal(true)
+        }    
+    }
+
+    const closeModal = () => {  
+        setShowModal(false)
+        setShowQandA(false)
+        setQuestionIndex(0)
+    }
     
     return(
         <StateContext.Provider
@@ -51,7 +65,12 @@ export const StateContextProvider = ( {children} ) => {
                 handleChange,
                 handleSubmit,
                 isLoading,
-                showQandA
+                showQandA,
+                questions,
+                nextQuestion,
+                questionIndex,
+                showModal,
+                closeModal
             }}
         >
             { children }
