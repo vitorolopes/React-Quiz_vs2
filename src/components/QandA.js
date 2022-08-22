@@ -1,8 +1,16 @@
 import React from 'react';
-import Modal from './Modal'
-import Loading from './Loading'
+import Modal from './Modal';
+import Loading from './Loading';
+import { useStateContext } from '../context/StateContextProvider';
 
 const QandA = () => {
+
+  const {isLoading} = useStateContext()
+
+  if(isLoading){
+    return <Loading/>
+  }
+
   return (
     <main>
       <section className='quiz'>
@@ -21,8 +29,7 @@ const QandA = () => {
         </article>
 
       </section>
-    { true && <Modal/>}
-    { false && <Loading/>}
+    { false && <Modal/>}
     </main>
   )
 }

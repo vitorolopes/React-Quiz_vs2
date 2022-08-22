@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useStateContext } from '../context/StateContextProvider';
 
 
 const SetupForm = () => {
 
-  const {dummyValue} = useStateContext()
-  console.log(dummyValue);
+  const {quiz,handleChange,handleSubmit} = useStateContext()
 
   return (
 
@@ -17,11 +16,20 @@ const SetupForm = () => {
 
            <div className="form-control">
                 <label htmlFor="amount">Number of questions</label>
-                <input className='form-input' type="number" />
+                <input className='form-input' type="number"
+                       min={0} max={10}
+                       name='amount'
+                       value={quiz.amount}
+                       onChange={handleChange}
+                />
            </div> 
            <div className="form-control">
                 <label htmlFor="category">category</label>
-                <select className='form-input' type="number">
+                <select className='form-input' type="number"
+                        name='category'
+                        value={quiz.category}
+                        onChange={handleChange}
+                >
                     <option value="sports">sports</option>
                     <option value="history">history</option>
                     <option value="politics">politics</option>
@@ -29,14 +37,22 @@ const SetupForm = () => {
            </div> 
            <div className="form-control">
                 <label htmlFor="difficulty">difficulty</label>
-                <select className='form-input' type="number">
+                <select className='form-input' type="number"
+                        name="difficulty"
+                        value={quiz.difficulty}
+                        onChange={handleChange}
+                >
                     <option value="easy">easy</option>
                     <option value="medium">medium</option>
                     <option value="hard">hard</option>
                 </select>
            </div> 
 
-           <button className='submit-btn'>start</button>
+           <button className='submit-btn'
+                   onClick={handleSubmit}
+           >
+              start
+           </button>
 
         </form>
         
