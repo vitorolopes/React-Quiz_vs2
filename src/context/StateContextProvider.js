@@ -15,6 +15,8 @@ export const StateContextProvider = ( {children} ) => {
     const [showQandA, setShowQandA] = useState(false);
     const [questionIndex, setQuestionIndex] = useState(0);
     const [showModal, setShowModal] = useState(false)
+//! HERE
+    const [correctAnswers, setCorrectAnswers] = useState(0)
 
     const handleChange = (e) => { 
         const name = e.target.name;
@@ -24,7 +26,6 @@ export const StateContextProvider = ( {children} ) => {
   
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("Oiii");
         // https://opentdb.com/api.php?amount=3&category=21&difficulty=easy&type=multiple
         // fetchQandA(url+amount+category+difficulty)
         const {amount, difficulty, category} = quiz
@@ -45,8 +46,13 @@ export const StateContextProvider = ( {children} ) => {
         setIsLoading(false)
     }
 
-    const nextQuestion = () => {
+    const nextQuestion = (index1, index2) => {
         setQuestionIndex(questionIndex + 1)
+//! HERE
+        if(index1 === index2){
+            setCorrectAnswers(correctAnswers + 1)
+        }
+
         if(questionIndex === questions.length - 1) {
             setShowModal(true)
         }    
@@ -56,6 +62,7 @@ export const StateContextProvider = ( {children} ) => {
         setShowModal(false)
         setShowQandA(false)
         setQuestionIndex(0)
+        setCorrectAnswers(0)
     }
     
     return(
@@ -70,7 +77,8 @@ export const StateContextProvider = ( {children} ) => {
                 nextQuestion,
                 questionIndex,
                 showModal,
-                closeModal
+                closeModal,
+                correctAnswers
             }}
         >
             { children }
